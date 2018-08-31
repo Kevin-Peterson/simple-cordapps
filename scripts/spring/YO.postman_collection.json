@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "deafb04a-4ccc-49c6-83f7-2997f1fae8ad",
+		"name": "YO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PartyA",
+			"description": "",
+			"item": [
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20010/api/yo/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20010",
+							"path": [
+								"api",
+								"yo",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "peers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20010/api/yo/peers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20010",
+							"path": [
+								"api",
+								"yo",
+								"peers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "yo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20010/api/yo/yo?target=PartyB",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20010",
+							"path": [
+								"api",
+								"yo",
+								"yo"
+							],
+							"query": [
+								{
+									"key": "target",
+									"value": "PartyB"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "yos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20010/api/yo/yos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20010",
+							"path": [
+								"api",
+								"yo",
+								"yos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PartyB",
+			"description": "",
+			"item": [
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20013/api/yo/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20013",
+							"path": [
+								"api",
+								"yo",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "peers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20013/api/yo/peers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20013",
+							"path": [
+								"api",
+								"yo",
+								"peers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "yo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20013/api/yo/yo?target=PartyA",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20013",
+							"path": [
+								"api",
+								"yo",
+								"yo"
+							],
+							"query": [
+								{
+									"key": "target",
+									"value": "PartyA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "yos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:20013/api/yo/yos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20013",
+							"path": [
+								"api",
+								"yo",
+								"yos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

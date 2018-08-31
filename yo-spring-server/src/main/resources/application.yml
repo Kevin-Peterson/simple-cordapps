@@ -1,0 +1,14 @@
+server:
+  port: 20013
+cordarpc:
+  rpcConfigs:
+#    - host: localhost
+#      port: 10006
+#      username: user1
+#      password: test
+#      x500Name: O=PartyA, L=London, C=GB
+    - host: localhost
+      port: 10009
+      username: user1
+      password: test
+      x500Name: O=PartyB, L=New York, C=US

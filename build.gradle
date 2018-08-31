@@ -1,0 +1,156 @@
+group 'com.github.roger3cev'
+version '1.0'
+
+// cordapp {
+//     info {
+//         name "simple-cordapp"
+//         vendor "R3"
+//         version "1.0"
+//     }
+// }
+
+buildscript {
+    ext.corda_release_group = 'com.r3.corda'
+    ext.corda_release_version = '3.1' // '3.1-corda' 
+    // ext.corda_release_group = 'net.corda' // 'com.r3.corda'
+    // ext.corda_release_version = '3.2-corda' // '3.1' // '3.1-corda' 
+    ext.corda_gradle_plugins_version = '4.0.25' //'3.1.0' // '4.0.25'
+    ext.kotlin_version = '1.2.50'
+    ext.quasar_version = '0.7.9'
+    ext.junit_version = '4.12'
+
+	repositories {
+		mavenLocal()
+        maven { url 'http://cpvra00a0223.wellsfargo.com:8090/artifactory/libs-release' 
+			}
+		maven { url 'http://cpvra00a0223.wellsfargo.com:8090/artifactory/plugins-release'
+            }
+        // maven { url 'file://c/Users/petek01/.m2/repository'
+        //     }
+	}             
+    // repositories {
+    //     mavenLocal()
+    //     mavenCentral()
+    //     jcenter()
+    // }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
+        classpath "net.corda.plugins:cordformation:$corda_gradle_plugins_version"
+        classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
+    }
+}
+
+repositories {
+	mavenLocal()
+    maven { url 'http://cpvra00a0223.wellsfargo.com:8090/artifactory/libs-release' 
+		}
+	maven { url 'http://cpvra00a0223.wellsfargo.com:8090/artifactory/plugins-release'
+        }
+//     maven { url 'file://c/Users/petek01/.m2/repository' }
+}
+
+// repositories {
+//    mavenLocal()
+//    jcenter()
+//    mavenCentral()
+//    maven { url 'https://jitpack.io' }
+// }
+
+apply plugin: 'kotlin'
+apply plugin: 'net.corda.plugins.cordapp'
+apply plugin: 'net.corda.plugins.cordformation'
+apply plugin: 'net.corda.plugins.quasar-utils'
+
+sourceSets {
+    main {
+        resources {
+            srcDir "config/dev"
+        }
+    }
+    test {
+        resources {
+            srcDir "config/test"
+        }
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "junit:junit:$junit_version"
+
+    // Corda integration dependencies
+    cordaCompile "$corda_release_group:corda-core:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-finance:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-jackson:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-rpc:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-webserver-impl:$corda_release_version"
+    cordaRuntime "$corda_release_group:corda:$corda_release_version"
+    cordaRuntime "$corda_release_group:corda-webserver:$corda_release_version"
+
+    testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
+
+    // CorDapp dependencies
+    // Specify your cordapp's dependencies below, including dependent cordapps
+}
+
+jar { baseName 'simple-cordapp' }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        languageVersion = "1.2"
+        apiVersion = "1.2"
+        jvmTarget = "1.8"
+        javaParameters = true   // Useful for reflection.
+    }
+}
+
+task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
+    directory "./build/nodes"
+    node {
+        name "O=Notary,L=London,C=GB"
+        notary = [validating : true]
+        p2pPort 10002
+        rpcSettings {
+            address("localhost:10003")
+            adminAddress("localhost:10043")
+        }
+        cordapps = []
+    }
+    node {
+        name "O=PartyA,L=London,C=GB"
+        p2pPort 10005
+        rpcSettings {
+            address("localhost:10006")
+            adminAddress("localhost:10046")
+        }
+//        webPort 10007
+        cordapps = []
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
+    }
+    node {
+        name "O=PartyB,L=New York,C=US"
+        p2pPort 10008
+        rpcSettings {
+            address("localhost:10009")
+            adminAddress("localhost:10049")
+        }
+//        webPort 10010
+        cordapps = []
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
+    }
+}
+
+task runYoRPCNodeA(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'net.corda.yo.ClientKt'
+    args 'localhost:10006'
+}
+
+task runYoRPCNodeB(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'net.corda.yo.ClientKt'
+    args 'localhost:10009'
+}
